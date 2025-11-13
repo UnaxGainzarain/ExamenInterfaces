@@ -16,25 +16,25 @@ import { PaymentPage } from './payment-page/payment-page';
     CommonModule, 
     RouterOutlet, 
     Header, 
-    Footer,  
+    Footer, 
+    PizzaPage,    
+    PaymentPage   
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
   
-  // 1. El estado (la "fuente de la verdad") vive aquí
   carrito = signal<CartItemModel[]>([]);
 
-  // 2. Este método actualiza el estado de forma inmutable
+  // === MÉTODO CORREGIDO ===
   agregarPizzaAlCarrito(event: AddPizzaEvent) {
-    
     const itemEnCarrito = this.carrito().find(
       item => item.pizza.nombre === event.pizza.nombre
     );
 
     if (itemEnCarrito) {
-      // SI LA PIZZA YA EXISTE:
+      // Actualización Inmutable
       this.carrito.update(currentCart => 
         currentCart.map(item => 
           item.pizza.nombre !== event.pizza.nombre 
@@ -43,11 +43,12 @@ export class App {
         )
       );
     } else {
-      // SI LA PIZZA ES NUEVA:
+      // Añadir nuevo item (esto estaba bien)
       const nuevoItem = new CartItemModel(event.pizza, event.cantidad);
       this.carrito.update(currentCart => [...currentCart, nuevoItem]);
     }
   }
+  // ==========================
 
   limpiarCarrito() {
     this.carrito.set([]);
@@ -55,19 +56,16 @@ export class App {
 
   onRouterOutletActivate(componente: any) {
     
-    // PASO A: Pasa el carrito [Input] "hacia abajo" al componente hijo
     if (componente instanceof PizzaPage || componente instanceof PaymentPage) {
       componente.carrito = this.carrito;
     }
 
-    // PASO B: Se suscribe al (Output) "hacia arriba" del hijo (PizzaPage)
     if (componente instanceof PizzaPage) {
       componente.addPizzaEvent.subscribe((event: AddPizzaEvent) => {
         this.agregarPizzaAlCarrito(event);
       });
     }
 
-    // PASO C: Se suscribe al (Output) "hacia arriba" del hijo (PaymentPage)
     if (componente instanceof PaymentPage) {
       componente.clearCartEvent.subscribe(() => {
         this.limpiarCarrito();
