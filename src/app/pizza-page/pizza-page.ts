@@ -1,5 +1,5 @@
 // src/app/pizza-page/pizza-page.ts
-import { Component, signal, Input, Output, EventEmitter, WritableSignal } from '@angular/core'; // Añadir Input, Output, EventEmitter, WritableSignal
+import { Component, signal, Input, Output, EventEmitter, WritableSignal, OnInit } from '@angular/core'; // Añadir Input, Output, EventEmitter, WritableSignal
 import { PizzaModel } from '../models/pizza.model';
 import { CartItemModel } from '../models/cart-item.model';
 import { PizzaCard, AddPizzaEvent } from '../pizza-card/pizza-card';
@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router'; // Importamos RouterLink para el b
   templateUrl: './pizza-page.html',
   styleUrl: './pizza-page.scss'
 })
-export class PizzaPage {
+export class PizzaPage  implements OnInit{
 
   pizzasDisponibles = signal<PizzaModel[]>([]);
 

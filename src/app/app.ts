@@ -7,12 +7,11 @@ import { CommonModule } from '@angular/common';
 
 import { CartItemModel } from './models/cart-item.model';
 import { AddPizzaEvent } from './pizza-card/pizza-card';
-import { PizzaPage } from './pizza-page/pizza-page';       // <--- Importar
-import { PaymentPage } from './payment-page/payment-page'; // <--- Importar
+import { PizzaPage } from './pizza-page/pizza-page';
+import { PaymentPage } from './payment-page/payment-page';
 
 @Component({
   selector: 'app-root',
-  // Asegúrate de que PizzaPage y PaymentPage están aquí
   imports: [
     CommonModule, 
     RouterOutlet, 
@@ -28,34 +27,46 @@ export class App {
   
   carrito = signal<CartItemModel[]>([]);
 
-  // ... (El resto de tus métodos: agregarPizzaAlCarrito, limpiarCarrito, onRouterOutletActivate)
+  // === ESTE ES EL MÉTODO QUE NECESITAS CORREGIR ===
+  
   agregarPizzaAlCarrito(event: AddPizzaEvent) {
+    
     const itemEnCarrito = this.carrito().find(
       item => item.pizza.nombre === event.pizza.nombre
     );
 
     if (itemEnCarrito) {
-      this.carrito.update(currentCart => {
-        itemEnCarrito.cantidad += event.cantidad;
-        return [...currentCart]; 
-      });
+      // SI LA PIZZA YA EXISTE:
+      // Usamos .map() para crear un NUEVO array (inmutabilidad)
+      this.carrito.update(currentCart => 
+        currentCart.map(item => 
+          item.pizza.nombre !== event.pizza.nombre 
+            ? item // No es el item, lo devolvemos tal cual
+            // Es el item, creamos un NUEVO CartItemModel
+            : new CartItemModel(item.pizza, item.cantidad + event.cantidad)
+        )
+      );
     } else {
+      // SI LA PIZZA ES NUEVA:
       const nuevoItem = new CartItemModel(event.pizza, event.cantidad);
       this.carrito.update(currentCart => [...currentCart, nuevoItem]);
     }
   }
+
+  // ===============================================
 
   limpiarCarrito() {
     this.carrito.set([]);
   }
 
   onRouterOutletActivate(componente: any) {
-    // Esta comprobación ahora funcionará
+    
     if (componente instanceof PizzaPage || componente instanceof PaymentPage) {
       componente.carrito = this.carrito;
     }
 
     if (componente instanceof PizzaPage) {
+      // (Esta suscripción llama al método 'agregarPizzaAlCarrito' de ARRIBA)
       componente.addPizzaEvent.subscribe((event: AddPizzaEvent) => {
         this.agregarPizzaAlCarrito(event);
       });
