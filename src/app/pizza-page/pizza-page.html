@@ -32,8 +32,20 @@
       </li>
     </ul>
 
-    <div class="d-grid">
-      <a routerLink="/pago" class="btn btn-success btn-lg">Ir a Pagar</a>
-    </div>
+    @if (!mostrarPago()) {
+      <div class="d-grid">
+        <button (click)="togglePago()" class="btn btn-success btn-lg">
+          Ir a Pagar
+        </button>
+      </div>
+    }
+  }
+
+  @if (mostrarPago()) {
+    <hr class="my-4">
+    <app-payment-page 
+      [carrito]="carrito" 
+      (clearCartEvent)="limpiarCarrito()">
+    </app-payment-page>
   }
 </div>

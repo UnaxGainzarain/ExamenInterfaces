@@ -8,6 +8,6 @@ export const routes: Routes = [
  { path: 'pago', component: PaymentPage },
  // Ruta por defecto
  { path: '', redirectTo: '/pizzas', pathMatch: 'full' },
- // Opcional: Redirigir si no encuentra la ruta
+ // Redirigir si no encuentra la ruta
  { path: '**', redirectTo: '/pizzas' }
 ];

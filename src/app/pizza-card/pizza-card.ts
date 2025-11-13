@@ -1,10 +1,10 @@
 // src/app/pizza-card/pizza-card.ts
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { PizzaModel } from '../models/pizza.model';
+import { CommonModule } from '@angular/common';
+// Importa FormGroup
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Usaremos @for y @if
 
-// Definimos lo que vamos a emitir
 export interface AddPizzaEvent {
   pizza: PizzaModel;
   cantidad: number;
@@ -12,30 +12,38 @@ export interface AddPizzaEvent {
 
 @Component({
   selector: 'app-pizza-card',
-  // Importamos CommonModule y ReactiveFormsModule
   imports: [CommonModule, ReactiveFormsModule], 
   templateUrl: './pizza-card.html',
   styleUrl: './pizza-card.scss'
 })
 export class PizzaCard {
-  // Input para recibir la pizza (como en foto-personal)
   pizza = input.required<PizzaModel>();
-
-  // Output para añadir al carrito (como clickFoto en foto-personal)
   addPizzaEvent = output<AddPizzaEvent>();
+  
+  // 1. Define el FormGroup
+  pizzaForm: FormGroup;
 
-  // Formulario para la cantidad, como en los apuntes [cite: 839]
-  cantidadControl = new FormControl(1, [Validators.required, Validators.min(1)]);
+  // 2. Inicializa el FormGroup en el constructor
+  constructor() {
+    this.pizzaForm = new FormGroup({
+      // 3. Mete el FormControl DENTRO del group
+      cantidad: new FormControl(1, [Validators.required, Validators.min(1)])
+    });
+  }
 
+  get cantidadControl() {
+    return this.pizzaForm.get('cantidad') as FormControl;
+  }
+
+  // 5. El método de submit ahora usa el 'pizzaForm'
   agregarAlCarrito() {
-    if (this.cantidadControl.valid && this.cantidadControl.value) {
-      // Emitimos el evento con la pizza y la cantidad
+    if (this.pizzaForm.valid) {
       this.addPizzaEvent.emit({
         pizza: this.pizza(),
-        cantidad: this.cantidadControl.value
+        cantidad: this.pizzaForm.value.cantidad // Saca el valor del form
       });
-      // Reseteamos la cantidad a 1
-      this.cantidadControl.setValue(1);
+      // 6. Resetea el form, no solo el control
+      this.pizzaForm.reset({ cantidad: 1 });
     }
   }
 }
