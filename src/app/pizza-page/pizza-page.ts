@@ -1,14 +1,13 @@
 // src/app/pizza-page/pizza-page.ts
-import { Component, signal, Input, Output, EventEmitter, WritableSignal, OnInit } from '@angular/core'; // Añadir Input, Output, EventEmitter, WritableSignal
-import { PizzaModel } from '../models/pizza.model';
+import { Component, signal, Input, Output, EventEmitter, WritableSignal, OnInit } from '@angular/core';import { PizzaModel } from '../models/pizza.model';
 import { CartItemModel } from '../models/cart-item.model';
-import { PizzaCard, AddPizzaEvent } from '../pizza-card/pizza-card';
+import { AddPizzaEvent, PizzaCard } from '../pizza-card/pizza-card';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router'; // Importamos RouterLink para el botón de Pagar
 
 @Component({
   selector: 'app-pizza-page',
-  imports: [CommonModule, PizzaCard, RouterLink], // Añadimos RouterLink
+  imports: [CommonModule, RouterLink, PizzaCard], // Añadimos RouterLink
   templateUrl: './pizza-page.html',
   styleUrl: './pizza-page.scss'
 })
@@ -17,8 +16,7 @@ export class PizzaPage  implements OnInit{
   pizzasDisponibles = signal<PizzaModel[]>([]);
 
   // 1. Recibe el carrito como Input
-  @Input() carrito!: WritableSignal<CartItemModel[]>; 
-
+  @Input() carrito!: WritableSignal<CartItemModel[]>;
   // 2. Emite el evento para añadir
   @Output() addPizzaEvent = new EventEmitter<AddPizzaEvent>();
 

@@ -16,19 +16,17 @@ import { PaymentPage } from './payment-page/payment-page';
     CommonModule, 
     RouterOutlet, 
     Header, 
-    Footer, 
-    PizzaPage,    
-    PaymentPage   
+    Footer,  
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
   
+  // 1. El estado (la "fuente de la verdad") vive aquí
   carrito = signal<CartItemModel[]>([]);
 
-  // === ESTE ES EL MÉTODO QUE NECESITAS CORREGIR ===
-  
+  // 2. Este método actualiza el estado de forma inmutable
   agregarPizzaAlCarrito(event: AddPizzaEvent) {
     
     const itemEnCarrito = this.carrito().find(
@@ -37,12 +35,10 @@ export class App {
 
     if (itemEnCarrito) {
       // SI LA PIZZA YA EXISTE:
-      // Usamos .map() para crear un NUEVO array (inmutabilidad)
       this.carrito.update(currentCart => 
         currentCart.map(item => 
           item.pizza.nombre !== event.pizza.nombre 
-            ? item // No es el item, lo devolvemos tal cual
-            // Es el item, creamos un NUEVO CartItemModel
+            ? item 
             : new CartItemModel(item.pizza, item.cantidad + event.cantidad)
         )
       );
@@ -53,25 +49,25 @@ export class App {
     }
   }
 
-  // ===============================================
-
   limpiarCarrito() {
     this.carrito.set([]);
   }
 
   onRouterOutletActivate(componente: any) {
     
+    // PASO A: Pasa el carrito [Input] "hacia abajo" al componente hijo
     if (componente instanceof PizzaPage || componente instanceof PaymentPage) {
       componente.carrito = this.carrito;
     }
 
+    // PASO B: Se suscribe al (Output) "hacia arriba" del hijo (PizzaPage)
     if (componente instanceof PizzaPage) {
-      // (Esta suscripción llama al método 'agregarPizzaAlCarrito' de ARRIBA)
       componente.addPizzaEvent.subscribe((event: AddPizzaEvent) => {
         this.agregarPizzaAlCarrito(event);
       });
     }
 
+    // PASO C: Se suscribe al (Output) "hacia arriba" del hijo (PaymentPage)
     if (componente instanceof PaymentPage) {
       componente.clearCartEvent.subscribe(() => {
         this.limpiarCarrito();
