@@ -29,22 +29,22 @@ export class PizzaPage {
     const margarita = new PizzaModel(
       "Margarita", 
       15.50, 
-      "img/margarita.jpg", // <--- CORREGIDO
-      ["img/icons/tomate.png", "img/icons/queso.png"] // <--- CORREGIDO
+      "img/pizza-margarita.jpg", // <--- CORREGIDO
+      ["icons/tomate.png", "icons/queso.png"] // <--- CORREGIDO
     );
 
     const bbq = new PizzaModel(
       "BBQ", 
       18.00, 
-      "img/bbq.jpg", // <--- CORREGIDO
-      ["img/icons/bbq.png", "img/icons/queso.png", "img/icons/carne.png"] // <--- CORREGIDO
+      "img/barbacoa.jpg", // <--- CORREGIDO
+      [ "icons/queso.png", "icons/carne.png"] // <--- CORREGIDO
     );
 
     const vegetariana = new PizzaModel(
-      "Vegetariana",
+      "Jamón Queso",
       17.00,
-      "img/vegetariana.jpg", // <--- CORREGIDO
-      ["img/icons/tomate.png", "img/icons/queso.png", "img/icons/verduras.png"] // <--- CORREGIDO
+      "img/JamonQueso.jpg", // <--- CORREGIDO
+      ["icons/tomate.png", "icons/queso.png", "icons/verduras.png"] // <--- CORREGIDO
     );
 
     this.pizzasDisponibles.set([margarita, bbq, vegetariana]);
