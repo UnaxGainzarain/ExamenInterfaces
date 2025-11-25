@@ -1,0 +1,41 @@
+[
+  {
+    "id": 10,
+    "title": "Margarita",
+    "image": "https://imag.bonviveur.com/pizza-margarita.jpg",
+    "price": 12.35,
+    "ok_celiacs": true,
+    "ingredients": [
+      {
+        "name": "Tomato Sauce"
+      },
+    {
+        "name": "Mozarella Cheese"
+      }
+    ]
+  },
+    {
+    "id": 11,
+    "title": "Carbonara",
+    "image": "https://comedera.com/wp-content/uploads/sites/9/2022/04/pizza-carbonara.jpg?resize=1316,740&quality=80",
+    "price": 20.60,
+    "ok_celiacs": false,
+    "ingredients": [
+      {
+        "name": "Cream Sauce"
+      },
+    {
+        "name": "Mozarella Cheese"
+      },
+    {
+        "name": "Bacon"
+      },
+    {
+        "name": "Fungis"
+      },
+    {
+        "name": "Egg"
+      }
+    ]
+  }
+]

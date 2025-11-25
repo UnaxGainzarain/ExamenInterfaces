@@ -1,0 +1,20 @@
+{
+  "id": 10,
+  "pizzas_order": [
+    {
+      "quantity": 2,
+      "pizza_type": {
+        "id": 10,
+        "title": "Margarita",
+        "image": "https://imag.bonviveur.com/pizza-margarita.jpg",
+        "price": 12.35,
+        "ok_celiacs": true,
+        "ingredients": [
+          {
+            "name": "Tomato Sauce"
+          }
+        ]
+      }
+    }
+  ]
+}
